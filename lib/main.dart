@@ -33,11 +33,7 @@ class MyApp extends StatelessWidget {
               ],
             )
         ),
-        Icon(
-          Icons.star,
-          color: Colors.red[500],
-        ),
-        const Text('41')
+        const FavoriteWidget(),
       ],
     ),
   );
@@ -116,49 +112,53 @@ class MyApp extends StatelessWidget {
   );
 }
 
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({Key? key, required this.title}) : super(key: key);
-
-  final String title;
+class FavoriteWidget extends StatefulWidget {
+  const FavoriteWidget({ super.key });
 
   @override
-  State<MyHomePage> createState() => _MyHomePageState();
+  State<FavoriteWidget> createState() => _FavoriteWidgetState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
-
-  void _incrementCounter() {
-    setState(() {
-      _counter++;
-    });
-  }
-
+class _FavoriteWidgetState extends State<FavoriteWidget> {
+  bool _isFavorited = true;
+  int _favoriteCount = 41;
+  
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.title),
-      ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            const Text(
-              'Hello world',
-            ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headline4,
-            ),
-          ],
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Container(
+          padding: const EdgeInsets.all(0),
+          child: IconButton(
+            padding: const EdgeInsets.all(0),
+            alignment: Alignment.centerRight,
+            icon: (_isFavorited
+            ? const Icon(Icons.star)
+            : const Icon(Icons.star_border)),
+            color: Colors.red[500],
+            onPressed: _toggleFavorite,
+          ),
         ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
-      ),
+        SizedBox(
+          width: 18,
+          child: SizedBox(
+            child: Text('$_favoriteCount'),
+          ),
+        )
+      ],
     );
+  }
+
+  void _toggleFavorite() {
+    setState(() {
+      if (_isFavorited) {
+        _favoriteCount -= 1;
+        _isFavorited = false;
+      } else {
+        _favoriteCount += 1;
+        _isFavorited = true;
+      }
+    });
   }
 }
